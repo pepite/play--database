@@ -11,7 +11,6 @@ if play_command == 'db:export':
         load_modules()
         do_classpath()
         do_java('play.modules.db.Exporter', sys.argv)
-        java_cmd = java_cmd
         try:
             subprocess.call(java_cmd, env=os.environ)
         except OSError:
@@ -27,8 +26,6 @@ if play_command == "db:import":
         load_modules()
         do_classpath()
         do_java('play.modules.db.Importer', sys.argv)
-        java_cmd = java_cmd 
-
         try:
             subprocess.call(java_cmd, env=os.environ)
         except OSError:
