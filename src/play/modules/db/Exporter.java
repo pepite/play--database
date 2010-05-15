@@ -25,7 +25,6 @@ import org.hibernate.annotations.common.util.ReflectHelper;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.NamingStrategy;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
-import play.Logger;
 import play.Play;
 
 import javax.persistence.Entity;
@@ -81,7 +80,6 @@ public class Exporter {
         String delim = ";";
 
         for (int i = 0; i < args.length; i++) {
-            Logger.info("args[" + i + "] " + args[i]);
             if (args[i].startsWith("--")) {
                 if (args[i].equals("--quiet")) {
                     script = false;
