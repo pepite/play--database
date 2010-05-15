@@ -33,7 +33,6 @@ import org.hibernate.cfg.reveng.ReverseEngineeringStrategy;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2x.Cfg2JavaTool;
 import org.hibernate.tool.hbm2x.POJOExporter;
-import play.Logger;
 import play.Play;
 
 import javax.persistence.Entity;
