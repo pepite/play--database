@@ -1,0 +1,62 @@
+h1. DB module
+
+This module allows you to export your JPA classes to an SQL script or to import a database tables to POJO instances. 
+
+h2. <a>Enable the DB module for the application</a>
+
+In the **/conf/application.conf** file, enable the DB  module by adding this line:
+
+bc. # The db  module
+module.db=${play.path}/modules/db
+
+h2. <a>Creating an SQL script from your domain model</a>
+
+bc. play db:export myapplication
+
+This command will create the SQL necessary to create your database. This is extremely usefull if you want to deploy your application in production and you are require to update the database manually.
+Be sure to configure correctly your JPA dialect in your conf/application.conf file.
+
+h3. Options (only with play! version greater than 1.0.2.1)
+
+Generate only the SQL drop clauses
+
+bc. play db:export myapplication --drop
+
+Generate only the SQL create clauses
+
+bc. play db:export myapplication --create
+
+Specify the SQL delimiter
+
+bc. play db:export myapplication --delimiter=;
+
+Specify the output file
+
+bc. play db:export myapplication  --output=myfile.ddl
+
+Export to the database
+
+bc. play db:export myapplication  --export
+
+Import extra data to the database (to be use with --export)
+
+bc. play db:export myapplication  --import=import.sql
+
+Do not format the SQL.
+
+bc. play db:export myapplication  --noformat
+
+Halt the export / script generation on the first error
+
+bc. play db:export myapplication  --haltonerror
+
+h2. <a>Creating your domain model from the database</a>
+
+bc. play db:import myapplication
+
+This command will create the classes in the models package based on the database tables. This is useful is you have an existing database and you want to resuse this database.
+
+Be sure to configure correctly your database access using your application.conf file (db.user, db.pass, db.driver, db.url, etc...).
+
+ 
+ 
