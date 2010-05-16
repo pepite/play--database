@@ -10,7 +10,12 @@ if play_command == 'db:export':
 	check_application()
         load_modules()
         do_classpath()
-        do_java('play.modules.db.Exporter', sys.argv)
+	try:
+	    # This is the new style to get the extra arg
+            do_java('play.modules.db.Exporter', sys.argv)
+        except Exception:
+	    # For play! < 1.0.3
+	    do_java('play.modules.db.Exporter')
         try:
             subprocess.call(java_cmd, env=os.environ)
         except OSError:
@@ -25,7 +30,12 @@ if play_command == "db:import":
  	check_application()
         load_modules()
         do_classpath()
-        do_java('play.modules.db.Importer', sys.argv)
+	try:
+            # This is the new style to get the extra arg
+            do_java('play.modules.db.Importer', sys.argv)
+        except Exception:
+            # For play! < 1.0.3
+            do_java('play.modules.db.Importer')
         try:
             subprocess.call(java_cmd, env=os.environ)
         except OSError:
