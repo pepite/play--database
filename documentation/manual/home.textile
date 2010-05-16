@@ -20,31 +20,37 @@ h3. Options (only with play! version greater than 1.0.2.1)
 
 Generate only the SQL drop clauses
 
-bc. play db export myapplication --drop
+bc. play db:export myapplication --drop
 
 Generate only the SQL create clauses
 
-bc. play db export myapplication --create
+bc. play db:export myapplication --create
 
 Specify the SQL delimiter
 
-bc. play db export myapplication --delimiter=;
+bc. play db:export myapplication --delimiter=;
 
 Specify the output file
 
-bc. play db export myapplication  --output=myfile.ddl
+bc. play db:export myapplication  --output=myfile.ddl
 
 Export to the database
 
-bc. play db export myapplication  --export
+bc. play db:export myapplication  --export
+
+Import extra data to the database (to be use with --export)
+
+bc. play db:export myapplication  --import=import.sql
 
 Do not format the SQL.
 
-bc. play db export myapplication  --noformat
+bc. play db:export myapplication  --noformat
 
 Halt the export / script generation on the first error
 
-bc. play db export myapplication  --haltonerror
+bc. play db:export myapplication  --haltonerror
+
+Generate only the SQL drop clauses
 
 h2. <a>Creating your domain model from the database</a>
 
