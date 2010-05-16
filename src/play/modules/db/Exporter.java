@@ -97,8 +97,8 @@ public class Exporter {
                     importFile = args[i].substring(9);
                 } else if (args[i].startsWith("--properties=")) {
                     propFile = args[i].substring(13);
-                } else if (args[i].equals("--format")) {
-                    format = true;
+                } else if (args[i].equals("--noformat")) {
+                    format = false;
                 } else if (args[i].startsWith("--delimiter=")) {
                     delim = args[i].substring(12);
                 } else if (args[i].startsWith("--config=")) {
