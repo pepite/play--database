@@ -83,9 +83,12 @@ public class Importer {
         final String url = Play.configuration.getProperty("db.url");
         if (url != null)
             cfg.setProperty("hibernate.connection.url", url);
-
-
-        cfg.readFromJDBC();
+	
+        final String defaultSchema = Play.configuration.getProperty("db.default.schema");
+	if (defaultSchema != null) {
+            cfg.setProperty("hibernate.default_schema", defaultSchema);  
+        }
+ 	cfg.readFromJDBC();
 
 
         POJOExporter se = new POJOExporter();
