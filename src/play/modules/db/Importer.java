@@ -84,6 +84,10 @@ public class Importer {
         if (url != null)
             cfg.setProperty("hibernate.connection.url", url);
 
+        final String defaultSchema = Play.configuration.getProperty("db.default.schema");
+        if (defaultSchema != null) {
+            cfg.setProperty("hibernate.default_schema", defaultSchema);
+        }
 
         cfg.readFromJDBC();
 
