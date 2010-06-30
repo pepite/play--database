@@ -143,6 +143,12 @@ public class Importer {
             cfg.setProperty("hibernate.connection.url", url);
 			Logger.info("Importer will use db.url = " + url);
 		}
+		
+		final String defaultSchema = Play.configuration.getProperty("db.default.schema");
+		if (defaultSchema != null) {
+			cfg.setProperty("hibernate.default_schema", defaultSchema);  
+			Logger.info("Importer will use db.default.schema = " + defaultSchema);
+		}
 
         cfg.readFromJDBC();
 		Logger.info("DB metadata reading done.");

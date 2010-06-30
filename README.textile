@@ -12,7 +12,7 @@ module.db=${play.path}/modules/db
 p. You can also define a default schema (as in @hibernate.default_schema@) with :
 
 bc. # Default Schema
-db.default.schema
+db.default.schema=MY_SCHEMA
 
 h2. <a>Creating an SQL script from your domain model</a>
 
