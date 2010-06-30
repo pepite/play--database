@@ -9,12 +9,17 @@ In the **/conf/application.conf** file, enable the DB  module by adding this lin
 bc. # The db  module
 module.db=${play.path}/modules/db
 
+p. You can also define a default schema (as in @hibernate.default_schema@) with :
+
+bc. # Default Schema
+db.default.schema
+
 h2. <a>Creating an SQL script from your domain model</a>
 
 bc. play db:export myapplication
 
 This command will create the SQL necessary to create your database. This is extremely usefull if you want to deploy your application in production and you are require to update the database manually.
-Be sure to configure correctly your JPA dialect in your conf/application.conf file.
+Be sure to configure correctly your JPA dialect in your **/conf/application.conf** file.
 
 h3. Options (only with play! version greater than 1.0.2.1)
 
@@ -54,9 +59,13 @@ h2. <a>Creating your domain model from the database</a>
 
 bc. play db:import myapplication
 
-This command will create the classes in the models package based on the database tables. This is useful is you have an existing database and you want to resuse this database.
+This command will create the classes in the models package based on the database tables. This is useful is you have an existing database and you want to re-use this database.
 
-Be sure to configure correctly your database access using your application.conf file (db.user, db.pass, db.driver, db.url, etc...).
+Be sure to configure correctly your database access using your **/conf/application.conf** file (@db.user@, @db.pass@, @db.driver@, @db.url@, etc...).
 
- 
- 
+h3. Options (only with play! version greater than 1.0.2.1)
+
+Enables reverse engineering customization.
+(See "Hibernate Tools documentation":http://www.redhat.com/docs/en-US/JBoss_Developer_Studio/3.0/html/Hibernate_Tools_Reference_Guide/hibernaterevengxmlfile.html)
+
+bc. play db:import myapplication --reveng=path.to/hibernate.reveng.xml
