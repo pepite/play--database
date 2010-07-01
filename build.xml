@@ -23,6 +23,7 @@
             <fileset dir="src">
                 <include name="**/*.properties"/>
                 <include name="**/*.xml"/>
+				<include name="**/*.ftl"/>
                 <include name="**/play.plugins"/>
                 <include name="**/play.static"/>
             </fileset>

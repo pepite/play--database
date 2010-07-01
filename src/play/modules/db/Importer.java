@@ -63,6 +63,9 @@ public class Importer {
 
 		// default value
 		String hibernateRevengXmlFilename = null;
+		boolean generateCRUDControllers = false;
+		boolean generatePOJOs = true;
+
 		// argument parameter is possible if we're not using the default value
 		Logger.info("Iterating on arguments, args.length = " + args.length);
         for (int i = 0; i < args.length; i++) {
@@ -84,6 +87,14 @@ public class Importer {
 					Logger.info("... args[" + i + "] starts with '--reveng:'");
                     hibernateRevengXmlFilename = args[i].substring(9);
 					Logger.info("... hibernateRevengXmlFilename = '" + hibernateRevengXmlFilename + "'");
+                } else if (args[i].startsWith("--crud")) {
+					Logger.info("... args[" + i + "] starts with '--crud'");
+                    generateCRUDControllers=true;
+					Logger.info("... generateCRUDControllers = '" + generateCRUDControllers + "'");
+                } else if (args[i].startsWith("--no-pojo")) {
+					Logger.info("... args[" + i + "] starts with '--no-pojo'");
+                    generatePOJOs=false;
+					Logger.info("... generatePOJOs = '" + generatePOJOs + "'");
                 }
             }
         }
@@ -153,17 +164,32 @@ public class Importer {
         cfg.readFromJDBC();
 		Logger.info("DB metadata reading done.");
 
-        POJOExporter se = new POJOExporter();
-        se.setProperties(cfg.getProperties());
-        se.setConfiguration(cfg);
-        se.getProperties().setProperty("ejb3", "true");
-        se.getProperties().setProperty("jdk5", "true");
+		if (generatePOJOs) {
+			Logger.info("POJO generation enabled.");
+			POJOExporter se = new POJOExporter();
+			se.setProperties(cfg.getProperties());
+			se.setConfiguration(cfg);
+			se.getProperties().setProperty("ejb3", "true");
+			se.getProperties().setProperty("jdk5", "true");
 
-        se.setOutputDirectory(new File(Play.applicationPath, "app/"));
-		Logger.info("Starting POJO Exporter ...");
-        se.start();
-		Logger.info("POJO Exporter done.");
-    }
+			se.setOutputDirectory(new File(Play.applicationPath, "app/"));
+			Logger.info("Starting POJO Exporter ...");
+			se.start();
+			Logger.info("POJO Exporter done.");
+		}
+		
+		if (generateCRUDControllers) {
+			Logger.info("CRUD generation enabled.");
+			CRUDControllerExporter se = new CRUDControllerExporter();
+			se.setProperties(cfg.getProperties());
+			se.setConfiguration(cfg);
+			// option to use the secure module and put the @Check annotation for the CRUD Controllers ...
+			se.getProperties().setProperty("secure", "true");
 
-
+			se.setOutputDirectory(new File(Play.applicationPath, "app/"));
+			Logger.info("Starting CRUD Controller Exporter ...");
+			se.start();
+			Logger.info("CRUD Controller Exporter done.");
+		}
+	}
 }

@@ -65,7 +65,17 @@ Be sure to configure correctly your database access using your **/conf/applicati
 
 h3. Options (only with play! version greater than 1.0.2.1)
 
+Enables CRUD Controller generation (with the secure-module annotation).
+
+bc. play db:import myapplication --crud
+
+Disables POJO generation. Useful if you want to keep the already generated files.
+
+bc. play db:import myapplication --no-pojo
+
 Enables reverse engineering customization.
-(See "Hibernate Tools documentation":http://www.redhat.com/docs/en-US/JBoss_Developer_Studio/3.0/html/Hibernate_Tools_Reference_Guide/hibernaterevengxmlfile.html)
+See "Hibernate Tools documentation":http://www.redhat.com/docs/en-US/JBoss_Developer_Studio/3.0/html/Hibernate_Tools_Reference_Guide/hibernaterevengxmlfile.html
+**WARNING**: the @<table>@ elements in the reverse engineering file seems to be ignored for POJO and CRUD generation.
+@<schema-selection>@, @<type-mapping>@ and @<table-filter>@ work correctly, though.
 
 bc. play db:import myapplication --reveng=path.to/hibernate.reveng.xml
