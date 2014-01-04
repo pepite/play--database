@@ -21,27 +21,40 @@
  */
 package play.modules.db;
 
-import org.hibernate.annotations.common.util.ReflectHelper;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.NamingStrategy;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import play.Play;
-
-import javax.persistence.Entity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 
-public class Exporter {
+import javax.persistence.Entity;
 
+import org.hibernate.annotations.common.util.ReflectHelper;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
+import org.hibernate.cfg.NamingStrategy;
+import org.hibernate.internal.util.config.ConfigurationHelper;
+import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.service.internal.StandardServiceRegistryImpl;
+import org.hibernate.tool.hbm2ddl.ImportSqlCommandExtractor;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+
+import play.Play;
+
+public class Exporter {
+	
+	private static StandardServiceRegistryImpl createServiceRegistry(Properties properties) {
+		Environment.verifyProperties( properties );
+		ConfigurationHelper.resolvePlaceHolders( properties );
+		return (StandardServiceRegistryImpl) new ServiceRegistryBuilder().applySettings( properties ).buildServiceRegistry();
+	}
 
     public static void main(String[] args) throws Exception {
 
         File root = new File(System.getProperty("application.path"));
         Play.init(root, System.getProperty("play.id", ""));
         List<Class> entities = Play.classloader.getAnnotatedClasses(Entity.class);
-        AnnotationConfiguration cfg = new AnnotationConfiguration();
+        Configuration cfg = new Configuration();
         cfg.setProperty("hibernate.hbm2ddl.auto", "create");
         for (Class _class : entities) {
             cfg.addAnnotatedClass(_class);
@@ -119,17 +132,25 @@ public class Exporter {
             props.load(new FileInputStream(propFile));
             cfg.setProperties(props);
         }
-
-        SchemaExport se = new SchemaExport(cfg)
-                .setHaltOnError(halt)
-                .setOutputFile(outFile)
-                .setImportFile(importFile)
-                .setDelimiter(delim);
-        if (format) {
-            se.setFormat(true);
-        }
-        se.execute(script, export, drop, create);
+        
+		if (importFile != null) {
+			cfg.setProperty(AvailableSettings.HBM2DDL_IMPORT_FILES, importFile);
+		}
+		
+		StandardServiceRegistryImpl serviceRegistry = createServiceRegistry(cfg.getProperties());
+		try {
+	        SchemaExport se = new SchemaExport(cfg)
+	                .setHaltOnError(halt)
+	                .setOutputFile(outFile)
+	                .setDelimiter(delim)
+	                .setImportSqlCommandExtractor(serviceRegistry.getService(ImportSqlCommandExtractor.class));
+	        if (format) {
+	            se.setFormat(true);
+	        }
+	        se.execute(script, export, drop, create);
+		}
+		finally {
+			serviceRegistry.destroy();
+		}
     }
-
-
 }
