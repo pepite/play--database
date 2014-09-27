@@ -1,0 +1,4 @@
+self: play -> db 1.1.2
+
+require:
+    - play
